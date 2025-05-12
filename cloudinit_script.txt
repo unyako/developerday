@@ -1,0 +1,14 @@
+#!/bin/bash
+sudo -u root python -m pip install --upgrade pip
+sudo -u root python -m pip install locust
+
+sudo -u root echo '
+from locust import HttpUser, task
+class HelloWorldUser(HttpUser):
+    @task
+    def hello_world(self):
+        self.client.get("/")
+ ' > /root/locustfile.py
+
+sudo -u root systemctl stop firewalld
+sudo -u root /usr/local/bin/locust -f /root/locustfile.py
